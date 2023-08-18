@@ -1,0 +1,40 @@
+#!/bin/bash
+
+create() {
+    sudo ip link add dev can0 type vcan
+    sudo ip link add dev can1 type vcan
+    echo "created virtual can0 can1"
+}
+
+setup() {
+    sudo ip link set can0 up
+    sudo ip link set can1 up
+    echo "setup can0 can1"
+}
+
+setdown() {
+    sudo ip link set can0 down
+    sudo ip link set can1 down
+    echo "shutdown can0 can1"
+}
+
+delete() {
+    sudo ip link delete can0
+    sudo ip link delete can1
+    echo "deleted can0 can1"
+}
+
+case $1 in
+    "-u")
+        create
+        setup
+        ;;
+    "-d")
+        setdown
+        delete
+        ;;
+    "*")
+        create
+        setup
+        ;;
+esac

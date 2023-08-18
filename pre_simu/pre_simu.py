@@ -1,7 +1,11 @@
-from typing import Any
 from can import Bus, Listener, Notifier
 from can.message import Message
+from threading import Thread
 import random
+import os
+
+def bms():
+    os.system('canplayer -I bms.log -l i can1=can1')
 
 class Kelly(Listener):
     def __init__(self, bus: Bus):
@@ -38,5 +42,5 @@ class Kelly(Listener):
 vcan0 = Bus(interface='socketcan', channel='can0')
 notify = Notifier(vcan0, [Kelly(vcan0)])
 
-while True:
-    pass
+r = Thread(target=bms)
+r.start() 

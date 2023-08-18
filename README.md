@@ -12,3 +12,8 @@ El ambiente de pruebas se creó utilizando las redes vcan (virtual can). Se crea
 * vcan1: Red que contiene la comunicación de los voltajes del Orion BMS.
 
 Video de funcionamiento [en este link](https://youtu.be/AczRkLPMyjk).
+
+## Como lanzar simulador de red (pre simu)
+
+1. Iniciar redes can `pre_simu/can -u`.
+2. Ejecutar simulador `python3 pre_simu/pre_simu.py`.
