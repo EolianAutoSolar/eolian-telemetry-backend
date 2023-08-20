@@ -35,7 +35,7 @@ class Kelly(Listener):
             self.bus.send(ans)
 
 
-vcan0 = Bus(interface='socketcan', channel='can0')
+vcan0 = Bus(interface='socketcan', channel='vcan0')
 notify = Notifier(vcan0, [Kelly(vcan0)])
 
 while True:
