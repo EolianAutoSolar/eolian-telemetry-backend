@@ -1,0 +1,2 @@
+python-can==4.2.2
+textual==0.36.0

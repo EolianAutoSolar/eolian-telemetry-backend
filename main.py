@@ -2,9 +2,11 @@
 
 import time
 import can
+import threading
 from can import Bus
 from can.message import Message
 from tools.operations import linear_map, voltage_transform
+from front import FrontEnd
 
 # TODO: implement this function
 def parsed_message(msg: can.Message):
@@ -16,7 +18,6 @@ def parsed_message(msg: can.Message):
         }
     elif id == 0xc3:
         parsedd_message = {
-            
         }
     return parsedd_message
 
@@ -37,12 +38,41 @@ class Database(can.Listener):
         f.write("{},{},{}\n".format(msg.timestamp, msg.arbitration_id, msg.data.hex()))
         f.close()
         locked = False
-        
-    
+
+
 class Frontend(can.Listener):
+    def __init__(self, frontEnd) -> None:
+        self.frontEnd = frontEnd
+        self.commandIndex = 0
+        self.commandPace = 0
+        self.data = [0,0,0,0,0,0,0,0,0,0]
+
     def on_message_received(self, msg: can.Message) -> None:
-        #print(msg)
-        pass
+        if msg.arbitration_id in [0x69, 0xcd]:
+            commands = [0x1b, 0x1a, 0x33, 0x37, 0x42, 0x43, 0x44]
+            parsedMessage = parsed_message_kelly(commands[self.commandIndex], msg)
+
+            match commands[self.commandIndex]:
+                case 0x33:
+                    if msg.arbitration_id == 0x69:
+                        self.data[3] = parsedMessage["motor_temperature"]
+                    else:
+                        self.data[9] = parsedMessage["motor_temperature"]
+                case 0x37:
+                    if msg.arbitration_id == 0x69:
+                        self.data[1] = parsedMessage["mechanical_speed"]
+                        self.data[2] = parsedMessage["mechanical_speed"]
+                    else:
+                        self.data[7] = parsedMessage["mechanical_speed"]
+                        self.data[8] = parsedMessage["mechanical_speed"]
+
+            self.frontEnd.data = self.data
+
+            if self.commandPace == 1:
+                self.commandIndex = (self.commandIndex+1) % len(commands)
+                self.commandPace = 0
+            else:
+                self.commandPace = 1
 
 def parsed_message_kelly(command: int, msg: can.Message):
     id = msg.arbitration_id
@@ -96,9 +126,9 @@ def request_kelly(bus):
         )
         idrespond=[0x069, 0x0cd]
         while True:
-            if len(idrespond)!=0: 
-                msg = bus.recv()       
-                if msg is not None:        
+            if len(idrespond)!=0:
+                msg = bus.recv()
+                if msg is not None:
                     response = parsed_message_kelly(c, msg) # 0x064 if msg.arbitration_id == 0x069 else 0x0c8 
                     idrespond.remove(msg.arbitration_id)
                     print(response)
@@ -114,12 +144,15 @@ vcankellys = Bus(interface='socketcan', channel='can0', can_filters=[
 vcan0 = Bus(interface='socketcan', channel='can0')
 vcan1 = Bus(interface='socketcan', channel='can1')
 
-can.Notifier([vcan0], [Frontend(), Database('vcan0.csv')])
-can.Notifier([vcan1], [Frontend(), Database('vcan1.csv')])
+frontEnd = FrontEnd()
+can.Notifier([vcan0], [Frontend(frontEnd), Database('vcan0.csv')])
+can.Notifier([vcan1], [Frontend(frontEnd), Database('vcan1.csv')])
 
-def main():
+def request_kelly_daemon():
     while True:
         request_kelly(vcankellys)
 
 if __name__ == "__main__":
-    main()
+    t1 = threading.Thread(target=request_kelly_daemon)
+    t1.start()
+    frontEnd.run()
