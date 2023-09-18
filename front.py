@@ -4,9 +4,15 @@ from textual.reactive import reactive
 from textual.widgets import ProgressBar
 from textual.widget import Widget
 
+# List used in the data update on main
+frontData = [0,0,0,0,0,0,0,0,0,0]
+
+# Class that takes a text and rendered it
 class TextBox(Widget):
+    # The reactive object permit the update of the content
     text = reactive("NaN")
 
+    # The CSS base style of the object
     DEFAULT_CSS = """
         TextBox {
         column-span: 1;
@@ -22,8 +28,10 @@ class TextBox(Widget):
         return self.text
 
 
+# FrontEnd App that reder all the important information to the screen
 class FrontEnd(App):
 
+    # Definition of the important objects for simpicity
     def __init__(self):
         super().__init__()
         self.SOC = ProgressBar(total=100, show_eta=False, id="soc", classes="data")
@@ -37,7 +45,10 @@ class FrontEnd(App):
         self.KDR = TextBox()
         self.KDT = TextBox()
 
+    # Definition of a reactive object to implement a easy refresh of the screen
     data = reactive([0,0,0,0,0,0,0,0,0,0], always_update=True)
+
+    # The CSS style of the APP
     CSS = """
         Screen {
         overflow: auto;
@@ -79,6 +90,7 @@ class FrontEnd(App):
         }
         """
 
+    # The base order of the objects on the APP screen
     def compose(self) -> ComposeResult:
         with Container(id="contentTable"):
             self.SOC.border_title = "SOC"
@@ -108,6 +120,7 @@ class FrontEnd(App):
                 yield self.KDT
                 c3.border_title = "Kelly Derecho"
 
+    # Function that updates the information on de APP when ever the data variable is updated
     def watch_data(self, old_value, new_value):
         self.SOC.update(progress=new_value[0])
         self.KIK.text = str(new_value[1])
