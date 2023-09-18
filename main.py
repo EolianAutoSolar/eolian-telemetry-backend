@@ -76,31 +76,39 @@ class Frontend(can.Listener):
         self.data = [0,0,0,0,0,0,0,0,0,0]
 
     def on_message_received(self, msg: can.Message) -> None:
-        if msg.arbitration_id in [0x69, 0xcd]:
+        if msg.arbitration_id in [0x69, 0xcd, 0x100, 0x102]:
             commands = [0x1b, 0x1a, 0x33, 0x37, 0x42, 0x43, 0x44]
-            parsedMessage = parsed_message_kelly(commands[self.commandIndex], msg)
 
             match commands[self.commandIndex]:
                 case 0x33:
                     if msg.arbitration_id == 0x69:
-                        self.data[3] = parsedMessage["motor_temperature"]
+                        self.data[3] = data[2]
                     else:
-                        self.data[9] = parsedMessage["motor_temperature"]
+                        self.data[9] = data[2]
                 case 0x37:
                     if msg.arbitration_id == 0x69:
-                        self.data[1] = parsedMessage["mechanical_speed"]
-                        self.data[2] = parsedMessage["mechanical_speed"]
+                        self.data[1] = data[0]<<8 | data[1]
+                        self.data[2] = data[0]<<8 | data[1]
                     else:
-                        self.data[7] = parsedMessage["mechanical_speed"]
-                        self.data[8] = parsedMessage["mechanical_speed"]
-
-            self.frontEnd.data = self.data
+                        self.data[7] = data[0]<<8 | data[1]
+                        self.data[8] = data[0]<<8 | data[1]
 
             if self.commandPace == 1:
                 self.commandIndex = (self.commandIndex+1) % len(commands)
                 self.commandPace = 0
             else:
                 self.commandPace = 1
+
+        elif msg.arbitration_id = 0x100:
+            self.data[0] = data[0]
+            self.data[4] = data[3:5]
+            self.data[5] = data[1:3]
+
+        elif msg.arbitration_id = 0x102:
+            self.data[6] = data[4]
+
+        self.frontEnd.data = self.data
+
 
 def parsed_message_kelly(command: int, msg: can.Message):
     id = msg.arbitration_id
