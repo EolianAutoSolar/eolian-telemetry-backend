@@ -148,7 +148,7 @@ def request_kelly(bus):
                     print(response)
                 continue
             break
-        time.sleep(1) #test
+        time.sleep(0.01) #test
 
 vcankellys = Bus(interface='socketcan', channel='can0', can_filters=[
     {"can_id": 0x069, "can_mask": 0xfff}, # response kelly1
