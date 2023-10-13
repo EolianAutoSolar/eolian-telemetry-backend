@@ -76,37 +76,14 @@ class Frontend(can.Listener):
         self.commandPace = 0
 
     def on_message_received(self, msg: can.Message) -> None:
-        # It takes the kelly important data
-        if msg.arbitration_id in [0x69, 0xcd]:
-            commands = [0x1b, 0x1a, 0x33, 0x37, 0x42, 0x43, 0x44]
-
-            if commands[self.commandIndex] == 0x33:
-                    if msg.arbitration_id == 0x69:
-                        frontData[3] = msg.data[2]
-                    else:
-                        frontData[9] = msg.data[2]
-            elif commands[self.commandIndex] == 0x37:
-                    if msg.arbitration_id == 0x69:
-                        frontData[1] = msg.data[0]<<8 | msg.data[1]
-                        frontData[2] = msg.data[0]<<8 | msg.data[1]
-                    else:
-                        frontData[7] = msg.data[0]<<8 | msg.data[1]
-                        frontData[8] = msg.data[0]<<8 | msg.data[1]
-
-
-            if self.commandPace == 1:
-                self.commandIndex = (self.commandIndex+1) % len(commands)
-                self.commandPace = 0
-            else:
-                self.commandPace = 1
 
         #It takes the BMS important data
-        elif msg.arbitration_id == 0x100:
+        if msg.arbitration_id == 0x100:
             frontData[0] = msg.data[0]
             frontData[4] = msg.data[3:5]
             frontData[5] = msg.data[1:3]
 
-        elif msg.arbitration_id == 0x102:
+        if msg.arbitration_id == 0x102:
             frontData[6] = msg.data[4]
 
         #It makes the data update to the FrontEnd App
@@ -169,6 +146,19 @@ def request_kelly(bus):
                 msg = bus.recv()
                 if msg is not None:
                     response = parsed_message_kelly(c, msg) # 0x064 if msg.arbitration_id == 0x069 else 0x0c8 
+                    if c == 0x33:
+                            if msg.arbitration_id == 0x69:
+                                frontData[3] = msg.data[2]
+                            else:
+                                frontData[9] = msg.data[2]
+                    elif c == 0x37:
+                            if msg.arbitration_id == 0x69:
+                                frontData[1] = msg.data[0]<<8 | msg.data[1]
+                                frontData[2] = msg.data[0]<<8 | msg.data[1]
+                            else:
+                                frontData[7] = msg.data[0]<<8 | msg.data[1]
+                                frontData[8] = msg.data[0]<<8 | msg.data[1]
+                    frontEnd.data = frontData
                     idrespond.remove(msg.arbitration_id)
                     print(response)
                 continue
