@@ -19,6 +19,11 @@ class OrionParse(can.Listener):
             parsed_message["pack_inst_voltage"] = data[3:5]
             parsed_message["pack_open_voltage"] = data[5:7]
             parsed_message["crc_checksum"] = data[7]
+
+            # Saving data for the frontend update
+            frontData[0] = msg.data[0]
+            frontData[4] = msg.data[3:5]
+            frontData[5] = msg.data[1:3]
         elif id == 0x101:
             parsed_message["pack_abs_current"] = data[0:2]
             parsed_message["max_voltage"] = data[2:4]
@@ -33,6 +38,9 @@ class OrionParse(can.Listener):
             parsed_message["internal_temp"] = data[5]
             parsed_message["id_max_volt"] = data[6]
             parsed_message["id_min_volt"] = data[7]
+
+            # Saving data for the frontend update
+            frontData[6] = msg.data[4]
         print(parsed_message)
 
 
@@ -66,29 +74,6 @@ class Database(can.Listener):
         f.write("{},{},{}\n".format(msg.timestamp, msg.arbitration_id, msg.data.hex()))
         f.close()
         locked = False
-
-# FrontEnd listener
-# For any can message, it update the FrontEnd data
-class Frontend(can.Listener):
-    def __init__(self, frontEnd) -> None:
-        self.frontEnd = frontEnd
-        self.commandIndex = 0
-        self.commandPace = 0
-
-    def on_message_received(self, msg: can.Message) -> None:
-
-        #It takes the BMS important data
-        if msg.arbitration_id == 0x100:
-            frontData[0] = msg.data[0]
-            frontData[4] = msg.data[3:5]
-            frontData[5] = msg.data[1:3]
-
-        if msg.arbitration_id == 0x102:
-            frontData[6] = msg.data[4]
-
-        #It makes the data update to the FrontEnd App
-        self.frontEnd.data = frontData
-
 
 def parsed_message_kelly(command: int, msg: can.Message):
     id = msg.arbitration_id
@@ -177,8 +162,8 @@ vcan1 = Bus(interface='socketcan', channel='can1')
 frontEnd = FrontEnd()
 
 # CanNotifiers
-can.Notifier([vcan0], [Frontend(frontEnd), Database('vcan0.csv')])
-can.Notifier([vcan1], [Frontend(frontEnd), Database('vcan1.csv')])
+can.Notifier([vcan0], [Database('vcan0.csv')])
+can.Notifier([vcan1], [OrionParse(), Database('vcan1.csv')])
 
 def request_kelly_daemon():
     while True:
