@@ -80,13 +80,12 @@ class Frontend(can.Listener):
         if msg.arbitration_id in [0x69, 0xcd]:
             commands = [0x1b, 0x1a, 0x33, 0x37, 0x42, 0x43, 0x44]
 
-            match commands[self.commandIndex]:
-                case 0x33:
+            if commands[self.commandIndex] == 0x33:
                     if msg.arbitration_id == 0x69:
                         frontData[3] = msg.data[2]
                     else:
                         frontData[9] = msg.data[2]
-                case 0x37:
+            elif commands[self.commandIndex] == 0x37:
                     if msg.arbitration_id == 0x69:
                         frontData[1] = msg.data[0]<<8 | msg.data[1]
                         frontData[2] = msg.data[0]<<8 | msg.data[1]
