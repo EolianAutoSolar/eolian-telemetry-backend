@@ -6,9 +6,13 @@ import threading
 from can import Bus
 from can.message import Message
 from tools.operations import linear_map, voltage_transform
-from front import FrontEnd, frontData
+from frontend import FrontEndInterface
 
 class OrionParse(can.Listener):
+
+    def __init__(self, frontend):
+        self.__frontend = frontend
+
     def on_message_received(self, msg: can.Message) -> None:
         id = msg.arbitration_id
         data = msg.data
@@ -21,9 +25,9 @@ class OrionParse(can.Listener):
             parsed_message["crc_checksum"] = data[7]
 
             # Saving data for the frontend update
-            frontData[0] = msg.data[0]
-            frontData[4] = msg.data[3:5]
-            frontData[5] = msg.data[1:3]
+            self.__frontend.update(bms_soc=msg.data[0])
+            self.__frontend.update(bms_vol=msg.data[3:5])
+            self.__frontend.update(bms_amp=msg.data[1:3])
         elif id == 0x101:
             parsed_message["pack_abs_current"] = data[0:2]
             parsed_message["max_voltage"] = data[2:4]
@@ -40,7 +44,7 @@ class OrionParse(can.Listener):
             parsed_message["id_min_volt"] = data[7]
 
             # Saving data for the frontend update
-            frontData[6] = msg.data[4]
+            self.__frontend.update(bms_tem=msg.data[4])
         print(parsed_message)
 
 
@@ -112,7 +116,7 @@ def parsed_message_kelly(command: int, msg: can.Message):
     #print(parsed_message)
     return parsed_message
 
-def request_kelly(bus):
+def request_kelly(bus, frontend):
     commands = [0x1b, 0x1a, 0x33, 0x37, 0x42, 0x43, 0x44]
     for c in commands:
         bus.send(
@@ -133,17 +137,16 @@ def request_kelly(bus):
                     response = parsed_message_kelly(c, msg) # 0x064 if msg.arbitration_id == 0x069 else 0x0c8 
                     if c == 0x33:
                             if msg.arbitration_id == 0x69:
-                                frontData[3] = msg.data[2]
+                                frontend.update(kelly_izq_tem=msg.data[2])
                             else:
-                                frontData[9] = msg.data[2]
+                                frontend.update(kelly_der_tem=msg.data[2])
                     elif c == 0x37:
                             if msg.arbitration_id == 0x69:
-                                frontData[1] = msg.data[0]<<8 | msg.data[1]
-                                frontData[2] = msg.data[0]<<8 | msg.data[1]
+                                frontend.update(kelly_izq_kmh=msg.data[0]<<8 | msg.data[1])
+                                frontend.update(kelly_izq_rpm=msg.data[0]<<8 | msg.data[1])
                             else:
-                                frontData[7] = msg.data[0]<<8 | msg.data[1]
-                                frontData[8] = msg.data[0]<<8 | msg.data[1]
-                    frontEnd.data = frontData
+                                frontend.update(kelly_der_kmh=msg.data[0]<<8 | msg.data[1])
+                                frontend.update(kelly_der_rpm=msg.data[0]<<8 | msg.data[1])
                     idrespond.remove(msg.arbitration_id)
                     print(response)
                 continue
@@ -159,15 +162,15 @@ vcan0 = Bus(interface='socketcan', channel='can0')
 vcan1 = Bus(interface='socketcan', channel='can1')
 
 # Front Object
-frontEnd = FrontEnd()
+view = FrontEndInterface()
 
 # CanNotifiers
 can.Notifier([vcan0], [Database('vcan0.csv')])
-can.Notifier([vcan1], [OrionParse(), Database('vcan1.csv')])
+can.Notifier([vcan1], [OrionParse(view), Database('vcan1.csv')])
 
 def request_kelly_daemon():
     while True:
-        request_kelly(vcankellys)
+        request_kelly(vcankellys, view)
 
 if __name__ == "__main__":
     # Threading the request_kelly function
@@ -175,4 +178,4 @@ if __name__ == "__main__":
     t1.start()
 
     # Running the FrontEnd
-    frontEnd.run()
+    view.run()

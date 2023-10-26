@@ -4,17 +4,14 @@ from textual.reactive import reactive
 from textual.widgets import ProgressBar
 from textual.widget import Widget
 
-# List used in the data update on main
-frontData = [0,0,0,0,0,0,0,0,0,0]
-
 # Class that takes a text and rendered it
-class TextBox(Widget):
+class NumberBox(Widget):
     # The reactive object permit the update of the content
-    text = reactive("NaN")
+    number = reactive(0)
 
     # The CSS base style of the object
     DEFAULT_CSS = """
-        TextBox {
+        NumberBox {
         column-span: 1;
         width: 1fr;
         height: 1fr;
@@ -25,28 +22,26 @@ class TextBox(Widget):
     """
 
     def render(self) -> str:
-        return self.text
+        return str(self.number)
 
 
 # FrontEnd App that reder all the important information to the screen
-class FrontEnd(App):
+class FrontEndInterface(App):
 
     # Definition of the important objects for simpicity
     def __init__(self):
         super().__init__()
         self.SOC = ProgressBar(total=100, show_eta=False, id="soc", classes="data")
-        self.KIK = TextBox()
-        self.KIR = TextBox()
-        self.KIT = TextBox()
-        self.BMV = TextBox()
-        self.BMA = TextBox()
-        self.BMT = TextBox()
-        self.KDK = TextBox()
-        self.KDR = TextBox()
-        self.KDT = TextBox()
+        self.KIK = NumberBox()
+        self.KIR = NumberBox()
+        self.KIT = NumberBox()
+        self.BMV = NumberBox()
+        self.BMA = NumberBox()
+        self.BMT = NumberBox()
+        self.KDK = NumberBox()
+        self.KDR = NumberBox()
+        self.KDT = NumberBox()
 
-    # Definition of a reactive object to implement a easy refresh of the screen
-    data = reactive([0,0,0,0,0,0,0,0,0,0], always_update=True)
 
     # The CSS style of the APP
     CSS = """
@@ -121,14 +116,14 @@ class FrontEnd(App):
                 c3.border_title = "Kelly Derecho"
 
     # Function that updates the information on de APP when ever the data variable is updated
-    def watch_data(self, old_value, new_value):
-        self.SOC.update(progress=new_value[0])
-        self.KIK.text = str(new_value[1])
-        self.KIR.text = str(new_value[2])
-        self.KIT.text = str(new_value[3])
-        self.BMV.text = str(new_value[4])
-        self.BMA.text = str(new_value[5])
-        self.BMT.text = str(new_value[6])
-        self.KDK.text = str(new_value[7])
-        self.KDR.text = str(new_value[8])
-        self.KDT.text = str(new_value[9])
+    def update(self, **component):
+        self.SOC.update(progress=component.get("bms_soc", self.SOC.progress))
+        self.KIK.number = component.get("kelly_izq_kmh", self.KIK.number)
+        self.KIR.number = component.get("kelly_izq_rpm", self.KIR.number)
+        self.KIT.number = component.get("kelly_izq_tem", self.KIT.number)
+        self.BMV.number = component.get("bms_vol", self.BMV.number)
+        self.BMA.number = component.get("bms_amp", self.BMA.number)
+        self.BMT.number = component.get("bms_tem", self.BMT.number)
+        self.KDK.number = component.get("kelly_der_kmh", self.KDK.number)
+        self.KDR.number = component.get("kelly_der_rpm", self.KDR.number)
+        self.KDT.number = component.get("kelly_der_tem", self.KDT.number)
