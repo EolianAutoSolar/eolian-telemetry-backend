@@ -13,6 +13,17 @@ El ambiente de pruebas se creó utilizando las redes vcan (virtual can). Se crea
 
 Video de funcionamiento [en este link](https://youtu.be/AczRkLPMyjk).
 
+## Organización general
+    .
+    ├── main                    # Punto de ejecución
+    ├── kelly                   # Traducción de mensajes can para el kelly
+    ├── front                   # Visualización
+    ├── orion                   # Traducción de mensajes can para el orion
+    ├── database                # Guardado de datos
+    ├── tools                   # Operaciones útiles
+    ├── requirements             
+    └── README.md
+
 ## Como lanzar simulador de red (pre simu)
 
 1. Iniciar redes can `pre_simu/can -u`.

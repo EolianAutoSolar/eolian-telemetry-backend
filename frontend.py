@@ -1,3 +1,4 @@
+import can
 from textual.app import App, ComposeResult
 from textual.containers import Container
 from textual.reactive import reactive

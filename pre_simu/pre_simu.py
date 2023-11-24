@@ -5,7 +5,7 @@ import random
 import os
 
 def bms():
-    os.system('canplayer -I bms.log -l i can1=can1')
+    os.system('canplayer -I candump27.log -l i can1=can1')
 
 class Kelly(Listener):
     def __init__(self, bus: Bus):
