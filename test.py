@@ -3,15 +3,18 @@ import time
 import random
 
 class Reader():
-    def __init__(self) -> None:
-        self.d = {}
+    def __init__(self, data_store) -> None:
+        self.data_store = data_store
 
-    def read(self, dc):
+    def read(self):
         while True:
-            self.d["C"] = random.randint(0, 10)
-            print("generated data ", self.d)
-            Process(target=dc.update, args=(self.d, )).start()
+            data = self.read_data()
+            print("generated data ", data)
+            Process(target=self.data_store.update, args=(data, )).start()
             time.sleep(1)
+    
+    def read_data(self):
+        return {"read data": random.randint(0, 10)}
 
 class Data():
     def __init__(self, services) -> None:
@@ -36,10 +39,10 @@ class Service():
             self.d[name] = value
         print("updated data ", self.d)
 
-r = Reader()
 s = Service()
 dc = Data([s])
-Process(target=r.read, args=(dc, )).start()
+r = Reader(dc)
+Process(target=r.read).start()
 
 while True:
     print("Service data {}".format(s.d))
