@@ -1,6 +1,7 @@
-from refactor import Service, Reader, Data
+from telemetry_core import Data
 from multiprocessing import Process
 
+# Working implementation of a whole program execution using telemetry_core architechture
 class Telemetry():
 
     def __init__(self, services : ['Service'], readers : ['Reader']) -> None:
@@ -9,7 +10,7 @@ class Telemetry():
             self.data_store.subscribe_service(s)
         self.readers = readers
         for r in self.readers:
-            r.subscribe_data_store(self.data_store)
+            self.data_store.subscribe_to_reader(r)
     
     def run(self):
         for i in range(len(self.readers) - 1):

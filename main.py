@@ -7,5 +7,6 @@ tui = ConsoleVisualization()
 
 #
 canbus = CanReader(channel='vcan0')
+canbus2 = CanReader(channel='vcan0')
 
-Telemetry([tui], [canbus]).run()
+Telemetry([tui], [canbus, canbus2]).run()

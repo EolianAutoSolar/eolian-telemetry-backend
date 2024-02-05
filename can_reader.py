@@ -1,4 +1,4 @@
-from refactor import Reader
+from telemetry_core import Reader
 import can
 import random
 
