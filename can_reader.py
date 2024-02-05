@@ -13,6 +13,7 @@ class CanReader(Reader):
         message = self.bus.recv()
         return self.parse_can_message(message)
     
+    # TODO: Add orion and kelly process formulas
     # receives and process a can message and returns it as data dict {name: value}
     def parse_can_message(self, message) -> dict:
         # parse message

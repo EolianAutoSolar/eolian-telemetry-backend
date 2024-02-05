@@ -78,10 +78,14 @@ class Service(ABC):
 # # 4. Start all of the Readers main loop
 # for r in readers:
 #     Process(target=r.read).start()
+# Note: Remember to always have a running loop as the main process to not kill
+#       to all of the spawned processes.
     
 # All of this program uses number_of_readers number of threads.
 # Also temporary threads are spawned to handle the Data updates and service executions.
-# Meaning that for each data received by a reader, number_of_services
+# Meaning that for each data received by a reader, 1 + number_of_services
 # temporary processes are spawned.
 
 # TODO: Make sure that all of the spawned processes finishs before a new spawn of the processes.
+# TODO: Update diagram
+# TODO: Add examples
