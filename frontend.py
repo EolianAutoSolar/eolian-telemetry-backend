@@ -42,4 +42,5 @@ class ConsoleVisualization(Service):
         soc_bar = self.soc_bar(data["bms_soc"])
         # Print the combined text
         output = soc_bar + '\n' + panel
-        print(output + "\033[F"*output.count('\n'), end="", flush=True)
+        cursor_up = "\033[F"
+        print(output + cursor_up * output.count('\n'), end="", flush=True)
