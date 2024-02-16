@@ -1,3 +1,5 @@
+# TODO: Update this following the refactor architechture and add it to main program
+
 # std modules
 import time
 
