@@ -1,6 +1,5 @@
 from telemetry_core import Service
 
-last = True
 # tui interface
 class ConsoleVisualization(Service):
 

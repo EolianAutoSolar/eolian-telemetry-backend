@@ -87,5 +87,3 @@ class Service(ABC):
 # temporary processes are spawned.
 
 # TODO: Make sure that all of the spawned processes finishs before a new spawn of the processes.
-# TODO: Update diagram
-# TODO: Add examples
