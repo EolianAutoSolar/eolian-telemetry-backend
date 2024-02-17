@@ -11,9 +11,9 @@ class OrionParse(can.Listener):
         parsed_message = {}
         if id == 0x100:
             parsed_message["pack_soc"] = data[0]
-            parsed_message["pack_current"] = data[1:3]
-            parsed_message["pack_inst_voltage"] = data[3:5]
-            parsed_message["pack_open_voltage"] = data[5:7]
+            parsed_message["pack_current"] = data[1]
+            parsed_message["pack_inst_voltage"] = data[3]
+            parsed_message["pack_open_voltage"] = data[5]
             parsed_message["crc_checksum"] = data[7]
 
             # Saving data for the frontend update
@@ -21,9 +21,9 @@ class OrionParse(can.Listener):
             self.__frontend.update(bms_vol=msg.data[3:5])
             self.__frontend.update(bms_amp=msg.data[1:3])
         elif id == 0x101:
-            parsed_message["pack_abs_current"] = data[0:2]
-            parsed_message["max_voltage"] = data[2:4]
-            parsed_message["min_voltage"] = data[4:6]
+            parsed_message["pack_abs_current"] = data[0]
+            parsed_message["max_voltage"] = data[2]
+            parsed_message["min_voltage"] = data[4]
             parsed_message["crc_checksum"] = data[6]
         elif id == 0x102:
             parsed_message["max_temp"] = data[0]

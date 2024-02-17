@@ -1,0 +1,4 @@
+timestamp,pack_soc,pack_current,pack_inst_voltage,pack_open_voltage,crc_checksum,pack_abs_current,max_voltage,min_voltage,crc_checksum,max_temp,id_max_temp,min_temp,id_min_temp,mean_temp,internal_temp,id_max_volt,id_min_volt
+1700860712.7743852,69,76,84,73,78,N,N,N,N,N,N,N,N,N,N,N,N
+1700860712.7810576,N,N,N,N,N,50,78,70,46,N,N,N,N,N,N,N,N
+1700860712.786595,N,N,N,N,N,N,N,N,N,12,4,175,42,5,0,66,52

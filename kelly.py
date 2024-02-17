@@ -22,7 +22,7 @@ def parsed_message_kelly(command: int, msg: can.Message):
     elif command == 0x1a:
         parsed_message["Ia"] = data[0]
         parsed_message["Ib"] = data[1]
-        parsed_message["Ia"] = data[2]
+        parsed_message["Ic"] = data[2]
         parsed_message["Va"] = voltage_transform(data[3])
         parsed_message["Vb"] = voltage_transform(data[4])
         parsed_message["Vc"] = voltage_transform(data[5])
