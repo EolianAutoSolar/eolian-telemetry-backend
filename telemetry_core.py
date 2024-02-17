@@ -9,6 +9,8 @@ from abc import ABC, abstractmethod
 class Data():
 
     def __init__(self) -> None:
+        # TODO: think wether or not this class should hold the complete car state, instead
+        # of just using the data received in each notificaction from the readers
         manager = Manager()
         self.data = manager.dict()
         self.services = []
