@@ -1,0 +1,55 @@
+@startuml
+interface ICanHandler <<interface>> {
+  # int id
+  # can.Bus internal_bus
+  # can.Bus external_bus
+  # can.Message change_id(message: can.Message, params=null)
+  # can.Message get_message(query: int)
+  # void send_message(base_message: can.message.Message)
+  # void run()
+  + void run_daemon()
+}
+abstract AbstractCanHandler {
+  + void run_daemon()
+}
+abstract AbstractKellyHandler {
+  # int kelly_id_query
+  # int kelly_id_response
+  # int[] kelly_id_messages
+  # can.Message change_id(message: can.Message, params=null)
+  # can.message.Message get_message(query: int)
+  # void send_message(base_message: can.message.Message)
+  # void run()
+}
+object LeftKellyHandler {
+  # can.Bus internal_bus = <<can0>>,<<<kelly_id_response>:<0xFFF>>>
+  # can.Bus external_bus = <<can_bridge>>
+  # int id = 0
+  # int kelly_id_query = 100
+  # int kelly_id_response = 105
+}
+object RightKellyHandler {
+  # can.Bus internal_bus = <<can0>>,<<<kelly_id_response>:<0xFFF>>>
+  # can.Bus external_bus = <<can_bridge>>
+  # int id = 1
+  # int kelly_id_query = 200
+  # int kelly_id_response = 205
+}
+
+object BMSHandler {
+  # can.Bus internal_bus = <<can1>>,<<<bms_id>:<0x7F0>>>
+  # can.Bus external_bus = <<can_bridge>>
+  # int id = 2
+  # int bms_id = 100
+  # can.Message change_id(message: can.Message, params=null)
+  # can.message.Message get_message(query: int)
+  # void send_message(base_message: can.message.Message)
+  # void run()
+}
+
+ICanHandler <|.. AbstractCanHandler
+AbstractCanHandler <|-- AbstractKellyHandler
+AbstractCanHandler <|-- BMSHandler 
+AbstractKellyHandler <|-- LeftKellyHandler
+AbstractKellyHandler <|-- RightKellyHandler
+@enduml
