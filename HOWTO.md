@@ -14,4 +14,4 @@ To run the test:
 
 1. Run test_main.py from the sender computer.
 2. Run test_main_remote.py from the receiver computer.
-3. Send can messages to the sender with `cansend 111#aa` (it could be any message since they aren't processed).
+3. Send can messages to the sender with `cansend vcan0 111#aa` (it could be any message since they aren't processed).
