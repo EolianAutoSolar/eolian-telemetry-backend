@@ -60,6 +60,7 @@ class Reader(ABC):
 # running a server.
 class Service(ABC):
     
+    # TODO: Now services expects the data to be used, a better way would be to first ask if the data to be used is available and then use it
     @abstractmethod
     def use_data(self, data):
         "single data usage"
