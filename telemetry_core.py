@@ -61,7 +61,7 @@ class Reader(ABC):
 class Service(ABC):
     
     @abstractmethod
-    def use_data(self, data : Data):
+    def use_data(self, data):
         "single data usage"
 
 # This is the standard way to initialize the whole program
