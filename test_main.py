@@ -5,10 +5,8 @@ from telemetry import Telemetry
 
 # 
 sender = RemoteSender("/dev/ttyUSB0")
-tui = ConsoleVisualization()
 
 #
 canbus = CanReader(channel='vcan0')
-canbus2 = CanReader(channel='vcan0')
 
-Telemetry([tui, sender], [canbus, canbus2]).run()
+Telemetry([sender], [canbus]).run()

@@ -1,8 +1,6 @@
 from telemetry_core import Service, Reader
 from digi.xbee.devices import XBeeDevice
 
-SEND_PORT = "/dev/ttyUSB0"
-RECV_PORT = "COM1"
 BAUD_RATE = 9600
 
 # TODO: Check where we could call the xbee.close() method
@@ -11,9 +9,9 @@ BAUD_RATE = 9600
 # TODO: XBee error handling
 class RemoteSender(Service):
 
-    def __init__(self):
+    def __init__(self, port):
         # TODO: Save xbee
-        self.xbee = XBeeDevice(SEND_PORT, BAUD_RATE)
+        self.xbee = XBeeDevice(port, BAUD_RATE)
 
     def use_data(self, data):
         self.xbee.open()
@@ -23,8 +21,8 @@ class RemoteSender(Service):
     
 class RemoteReceiver(Reader):
 
-    def __init__(self):
-        self.xbee = XBeeDevice(RECV_PORT, BAUD_RATE)
+    def __init__(self, port):
+        self.xbee = XBeeDevice(port, BAUD_RATE)
 
     def read_data(self) -> dict:
         self.xbee.open()

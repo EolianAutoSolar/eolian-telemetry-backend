@@ -4,7 +4,6 @@ from remote import RemoteReceiver
 from telemetry import Telemetry
 
 # 
-tui = ConsoleVisualization()
 
 #
 recv = RemoteReceiver("COM1")

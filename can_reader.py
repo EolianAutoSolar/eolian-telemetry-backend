@@ -27,5 +27,5 @@ class CanReader(Reader):
                  "bms_volt": random.randint(0, 20), 
                  "bms_curr": random.randint(0, 20), 
                  "bms_temp": random.randint(0, 20),
-                 "raw_message": "ID#DATA" 
+                 "raw_message": "TIMESTAMP#ID#DATA" 
                  }
