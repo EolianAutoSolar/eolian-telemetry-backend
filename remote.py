@@ -1,5 +1,6 @@
 from telemetry_core import Service, Reader
 from digi.xbee.devices import XBeeDevice
+import time
 
 BAUD_RATE = 9600
 
@@ -15,9 +16,10 @@ class RemoteSender(Service):
 
     def use_data(self, data):
         self.xbee.open()
-        print("Sent message {}".format(data))
+        print("Sent message {}".format(data["raw_message"]))
         self.xbee.send_data_broadcast(data["raw_message"])
         self.xbee.close()
+        # self.xbee.close()
     
 class RemoteReceiver(Reader):
 
@@ -28,6 +30,7 @@ class RemoteReceiver(Reader):
         self.xbee.open()
         read_data = self.xbee.read_data()
         self.xbee.close()
-        print("Read data {}".read_data)
+        if read_data is not None:
+            print("Read data {}".format(read_data.data.decode()))
         # pasar data a dict
         return { "message": read_data }
