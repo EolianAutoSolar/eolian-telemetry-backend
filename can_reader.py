@@ -1,8 +1,8 @@
-from telemetry_core import Reader
+from telemetry_core import Producer
 import can
 import random
 
-class CanReader(Reader):
+class CanReader(Producer):
 
     # If using a virtual interface bitrate is None, if using a real interface specify the bitrate
     def __init__(self, channel, bitrate=None) -> None:
