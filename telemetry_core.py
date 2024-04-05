@@ -1,5 +1,6 @@
 from multiprocessing import Process, Queue
 from abc import ABC, abstractmethod
+import datetime
 
 # TODO: make everything private
 
@@ -13,7 +14,7 @@ class Producer(ABC):
     def run(self, queue : Queue) -> None:
         while True:
             data = self.read_data()
-            queue.put(data)
+            print("Produced data {} at {} {}".format(data, datetime.datetime.now(), queue.put(data)))
             # TODO: maybe a condition or delay should go here
     
     # read_data should return a dictionary containing pairs {name : value}
@@ -43,3 +44,11 @@ class Consumer():
             data = queue.get()
             for process in self.processes:
                 process.use_data(data)
+
+# To create a program following this structures:
+#   1. Set up the various producers
+#   2. Set up the Consumer with the producers from 1.
+#   3. Set un the Producer
+#   4. Call Telemetry with 3. and 2.
+
+# You can find an example in telemetry.py

@@ -8,6 +8,7 @@ class CanReader(Producer):
     def __init__(self, channel, bitrate=None) -> None:
         super().__init__()
         self.bus = can.Bus(interface='socketcan', channel=channel, bitrate=bitrate)
+        self.counter = 0
 
     def read_data(self) -> dict:
         message = self.bus.recv()
@@ -17,6 +18,8 @@ class CanReader(Producer):
     # receives and process a can message and returns it as data dict {name: value}
     def parse_can_message(self, message) -> dict:
         # parse message
+        self.counter+=1
+        return self.counter
         return { "kelly_izq_rpm": random.randint(5, 10),
                  "kelly_izq_temp": random.randint(0, 20), 
                  "kelly_izq_vel": random.randint(0, 20), 
