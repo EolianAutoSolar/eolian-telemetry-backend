@@ -1,7 +1,7 @@
-from telemetry_core import Service
+from telemetry_core import Process
 
 # tui interface
-class ConsoleVisualization(Service):
+class ConsoleVisualization(Process):
 
     def __init__(self) -> None:
         super().__init__()
@@ -38,9 +38,10 @@ class ConsoleVisualization(Service):
 --------------------------------------------------|""".format(**values)
 
     def use_data(self, data) -> None:
-        panel = self.main_panel(data)
-        soc_bar = self.soc_bar(data["bms_soc"])
-        # Print the combined text
-        output = soc_bar + '\n' + panel
-        cursor_up = "\033[F"
-        print(output + cursor_up * output.count('\n'), end="", flush=True)
+        # panel = self.main_panel(data)
+        # soc_bar = self.soc_bar(data["bms_soc"])
+        # # Print the combined text
+        # output = soc_bar + '\n' + panel
+        # cursor_up = "\033[F"
+        # print(output + cursor_up * output.count('\n'), end="", flush=True)
+        print('Frontend visualization {}'.format(data))

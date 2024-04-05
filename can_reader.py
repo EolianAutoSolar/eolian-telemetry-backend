@@ -19,7 +19,7 @@ class CanReader(Producer):
     def parse_can_message(self, message) -> dict:
         # parse message
         self.counter+=1
-        return self.counter
+        return { 'raw_message': str(self.counter) }
         return { "kelly_izq_rpm": random.randint(5, 10),
                  "kelly_izq_temp": random.randint(0, 20), 
                  "kelly_izq_vel": random.randint(0, 20), 
@@ -29,5 +29,6 @@ class CanReader(Producer):
                  "bms_soc": random.randint(0, 20), 
                  "bms_volt": random.randint(0, 20), 
                  "bms_curr": random.randint(0, 20), 
-                 "bms_temp": random.randint(0, 20), 
+                 "bms_temp": random.randint(0, 20),
+                 "raw_message": "TIMESTAMP#ID#DATA" 
                  }

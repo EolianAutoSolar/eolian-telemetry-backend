@@ -14,7 +14,8 @@ class Producer(ABC):
     def run(self, queue : Queue) -> None:
         while True:
             data = self.read_data()
-            print("Produced data {} at {} {}".format(data, datetime.datetime.now(), queue.put(data)))
+            # print("Produced data {} at {} {}".format(data, datetime.datetime.now(), queue.put(data)))
+            queue.put(data)
             # TODO: maybe a condition or delay should go here
     
     # read_data should return a dictionary containing pairs {name : value}
