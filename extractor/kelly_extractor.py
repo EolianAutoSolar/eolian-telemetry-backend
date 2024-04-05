@@ -15,6 +15,7 @@ with open('vcan0.csv', 'r') as csvfile:
         data = row[2]
         
         query = msg_id >> 3
+        
         idkelly = msg_id & 0b111
         
         if query == 0x1b:
@@ -30,4 +31,9 @@ with open('vcan0.csv', 'r') as csvfile:
         elif query == 0x43:
             pass
         elif query == 0x44:
+            pass
+        
+        if idkelly == 0x000:
+            pass
+        elif idkelly == 0x001:
             pass
