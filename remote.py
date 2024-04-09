@@ -1,4 +1,4 @@
-from telemetry_core import Process
+from telemetry_core import Process, Producer
 from digi.xbee.devices import XBeeDevice
 
 BAUD_RATE = 9600
@@ -27,7 +27,7 @@ class RemoteSender(Process):
             self.counter = 0
             self.data_buffer = ''
     
-class RemoteReceiver(Process):
+class RemoteReceiver(Producer):
 
     def __init__(self, port):
         self.xbee = XBeeDevice(port, BAUD_RATE)
