@@ -6,7 +6,7 @@ from frontend import ConsoleVisualization
 from remote import RemoteSender
 
 # 
-canbus = CanReader('vcan0')
+canbus = CanReader('can_bridge')
 
 xbee = RemoteSender('/dev/ttyUSB0')
 db = Database('otp.txt')

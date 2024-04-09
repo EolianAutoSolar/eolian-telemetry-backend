@@ -21,7 +21,7 @@ class RemoteSender(Process):
         # TODO: This value is important, it should not be set as a magic number
         if self.counter == 15:            
             self.xbee.open()
-            print("Sent message {}".format(self.data_buffer))
+            # print("Sent message {}".format(self.data_buffer))
             self.xbee.send_data_broadcast(self.data_buffer)
             self.xbee.close()
             self.counter = 0
