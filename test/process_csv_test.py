@@ -10,12 +10,12 @@ def process_csv(can_csv) -> None:
 
 def check_file(filename):
     print("Checking "+filename+"...")
-    if filecmp.cmp(filename, "expeted_"+filename):
+    if filecmp.cmp(filename, "expected_"+filename):
         print("Test successful!")
     else:
         print("Test unsuccessful: "+filename+" and expected_"+filename+" are not the same")
 
 if __name__ == "__main__":
     process_csv("can.csv")
-    check_file("orion.csv")
-    check_file("kellys.csv")
+    check_file("bms.csv")
+    check_file("kelly.csv")
