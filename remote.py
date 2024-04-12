@@ -1,4 +1,4 @@
-from telemetry_core import Process
+from telemetry_core import Process, Producer
 from digi.xbee.devices import XBeeDevice
 
 BAUD_RATE = 230400
@@ -21,7 +21,7 @@ class RemoteSender(Process):
         self.counter += 1
         self.val +=1
         # TODO: This value is important, it should not be set as a magic number
-        if self.counter == 6:            
+        if self.counter == 6:
             # print("Sent message {}".format(self.data_buffer))
             xbee_network = self.xbee.get_network()
             remote_device = xbee_network.discover_device("XBEE_B")
@@ -30,16 +30,20 @@ class RemoteSender(Process):
             self.counter = 0
             self.data_buffer = ''
     
-class RemoteReceiver(Process):
+class RemoteReceiver(Producer):
 
     def __init__(self, port):
         self.xbee = XBeeDevice(port, BAUD_RATE)
+        self.xbee.open()
 
     def read_data(self) -> dict:
         self.xbee.open()
         read_data = self.xbee.read_data()
+        # TODO: it will probably be a bottleneck
+        while read_data is None:
+            read_data = self.xbee.read_data()
+            pass
+            # print("Read data {}".format(read_data.data.decode()))
         self.xbee.close()
-        if read_data is not None:
-            print("Read data {}".format(read_data.data.decode()))
         # pasar data a dict
         return { "message": read_data }
