@@ -11,5 +11,7 @@ class Telemetry():
 
     def run(self):
         queue = Queue(1)
-        Process(target=self.producer.run, args=(queue,)).start()
-        self.consumer.run(queue)
+        # Process(target=self.producer.run, args=(queue,)).start()
+        # self.consumer.run(queue) #TODO: this doesnt work idk why
+        Process(target=self.consumer.run, args=(queue,)).start()
+        self.producer.run(queue)
