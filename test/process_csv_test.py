@@ -2,7 +2,7 @@
 import filecmp
 
 def process_csv(can_csv) -> None:
-    # TOOD: Procesar can.csv y guardarlo en los archivos orion.csv and kellys.csv siguiendo las formulas de traduccion de
+    # TOOD: Procesar can.csv y guardarlo en los archivos bms.csv and kelly.csv siguiendo las formulas de traduccion de
     # orion.OrionParse.on_message_received y kelly.parsed_message_kelly.
     # Por cada fila leida, se deberia guardar el estado completo del componente, reemplazando los datos
     # no procesados por el mensaje por N.
