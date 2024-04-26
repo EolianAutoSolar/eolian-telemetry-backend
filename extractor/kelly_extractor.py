@@ -67,7 +67,7 @@ with open('vcan0.csv', 'r') as csvfile:
         elif query == 0x44:
             messages[24]  = datas[0]
             
-        with open('kelly.csv', 'a', newline='') as csvfile2:
-            writer = csv.writer(csvfile2)
+        with open('kelly.csv', 'a', newline = '') as kellyfile:
+            writer = csv.writer(kellyfile)
             
             writer.writerow(messages)
