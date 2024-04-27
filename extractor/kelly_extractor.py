@@ -9,18 +9,22 @@ def voltage_transform(value: int):
 
 def str_to_data(str):
     data = []
-    for i in range(len(str) // 2):
+    for i in range(0, len(str), 2):
         data.append(int(str[i : i + 2], 16))
     return data
 
-with open('vcan0.csv', 'r') as csvfile:
-    reader = csv.reader(csvfile, delimiter = ',', quotechar = '"')
+with open('vcan0.csv', 'r') as can0file:
+    reader = csv.reader(can0file, delimiter = ',', quotechar = '"')
     i = 0
+    
     for row in reader:
         i += 1
+        
         if(i == 1):
             continue
             
+        print(row)
+        
         messages = []
         
         for _ in range(25):
@@ -32,9 +36,9 @@ with open('vcan0.csv', 'r') as csvfile:
         
         data = row[2]
         
-        query = msg_id >> 3
+        query = int(msg_id) >> 3
         
-        idkelly = msg_id & 0b111
+        idkelly = int(msg_id) & 0b1
         
         datas = str_to_data(data)
         
@@ -45,7 +49,7 @@ with open('vcan0.csv', 'r') as csvfile:
             messages[2] = linear_map(datas[0], 0, 255, 0, 5)
             messages[3] = linear_map(datas[1], 0, 255, 0, 5)
             messages[4] = voltage_transform(datas[2])
-            messages[5] = linear_map(datas[3],120, 134, 4.75, 5.25)
+            messages[5] = linear_map(datas[3], 120, 134, 4.75, 5.25)
             messages[6] = voltage_transform(datas[4])
         elif query == 0x1a:
             messages[7] = datas[0]
@@ -62,9 +66,9 @@ with open('vcan0.csv', 'r') as csvfile:
             messages[17] = datas[4]
             messages[18] = datas[5]
         elif query == 0x37:
-            messages[19] = datas[0]<<8 | datas[1]
+            messages[19] = datas[0] << 8 | datas[1]
             messages[20]  = datas[2]
-            messages[21]  = datas[3] <<8 | datas[4]
+            messages[21]  = datas[3] << 8 | datas[4]
         elif query == 0x42:
             messages[22] = datas[0]
         elif query == 0x43:
@@ -73,6 +77,8 @@ with open('vcan0.csv', 'r') as csvfile:
             messages[24]  = datas[0]
             
         with open('kelly.csv', 'a', newline = '') as kellyfile:
+            print(messages)
+            
             writer = csv.writer(kellyfile)
             
             writer.writerow(messages)
