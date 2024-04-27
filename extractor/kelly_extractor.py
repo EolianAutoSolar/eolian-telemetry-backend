@@ -1,16 +1,16 @@
 import csv
 
-def linear_map(value: int, min: int, max:int, tomin:int, tomax:int):
-    m = (tomax-tomin)/(max-min)
-    return m*(value-min)+tomin
+def linear_map(value: int, min: int, max: int, tomin: int, tomax: int):
+    m = (tomax - tomin) / (max - min)
+    return m * (value - min) + tomin
 
 def voltage_transform(value: int):
-    return value/1.84
+    return value / 1.84
 
-def msg_to_data(msg):
+def str_to_data(str):
     data = []
-    for i in range(len(msg)//2):
-        data.append(int(msg[i:i+2], 16))
+    for i in range(len(str) // 2):
+        data.append(int(str[i : i + 2], 16))
     return data
 
 with open('vcan0.csv', 'r') as csvfile:
@@ -36,7 +36,7 @@ with open('vcan0.csv', 'r') as csvfile:
         
         idkelly = msg_id & 0b111
         
-        datas = msg_to_data(data)
+        datas = str_to_data(data)
         
         messages[0] = timestamp
         messages[1] = idkelly
