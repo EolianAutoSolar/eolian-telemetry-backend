@@ -13,7 +13,7 @@ def str_to_data(str):
         data.append(int(str[i : i + 2], 16))
     return data
 
-with open('vcan0.csv', 'r') as can0file:
+with open('extractor\\vcan0.csv', 'r') as can0file:
     reader = csv.reader(can0file, delimiter = ',', quotechar = '"')
     i = 0
     
@@ -22,8 +22,6 @@ with open('vcan0.csv', 'r') as can0file:
         
         if(i == 1):
             continue
-            
-        print(row)
         
         messages = []
         
@@ -51,6 +49,7 @@ with open('vcan0.csv', 'r') as can0file:
             messages[4] = voltage_transform(datas[2])
             messages[5] = linear_map(datas[3], 120, 134, 4.75, 5.25)
             messages[6] = voltage_transform(datas[4])
+            
         elif query == 0x1a:
             messages[7] = datas[0]
             messages[8] = datas[1]
@@ -58,6 +57,7 @@ with open('vcan0.csv', 'r') as can0file:
             messages[10] = voltage_transform(datas[3])
             messages[11] = voltage_transform(datas[4])
             messages[12] = voltage_transform(datas[5])
+            
         elif query == 0x33:
             messages[13] = datas[0]
             messages[14] = datas[1]
@@ -65,19 +65,22 @@ with open('vcan0.csv', 'r') as can0file:
             messages[16] = datas[3]
             messages[17] = datas[4]
             messages[18] = datas[5]
+            
         elif query == 0x37:
             messages[19] = datas[0] << 8 | datas[1]
             messages[20]  = datas[2]
             messages[21]  = datas[3] << 8 | datas[4]
+            
         elif query == 0x42:
             messages[22] = datas[0]
+            
         elif query == 0x43:
             messages[23]  = datas[0]
+            
         elif query == 0x44:
             messages[24]  = datas[0]
             
-        with open('kelly.csv', 'a', newline = '') as kellyfile:
-            print(messages)
+        with open('extractor\\kelly.csv', 'a', newline = '') as kellyfile:
             
             writer = csv.writer(kellyfile)
             
