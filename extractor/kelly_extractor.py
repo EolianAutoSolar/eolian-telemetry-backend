@@ -30,13 +30,13 @@ with open('extractor\\vcan0.csv', 'r') as can0file:
         
         timestamp = row[0]
         
-        msg_id = row[1]
+        msg_id = int(row[1])
         
         data = row[2]
         
-        query = int(msg_id) >> 3
+        query = msg_id >> 3
         
-        idkelly = int(msg_id) & 0b1
+        idkelly = msg_id & 0b1
         
         datas = str_to_data(data)
         
