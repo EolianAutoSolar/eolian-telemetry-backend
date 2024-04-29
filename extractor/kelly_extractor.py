@@ -68,8 +68,8 @@ with open('extractor\\vcan0.csv', 'r') as can0file:
             
         elif query == 0x37:
             messages[19] = datas[0] << 8 | datas[1]
-            messages[20]  = datas[2]
-            messages[21]  = datas[3] << 8 | datas[4]
+            messages[20] = datas[2]
+            messages[21] = datas[3] << 8 | datas[4]
             
         elif query == 0x42:
             messages[22] = datas[0]
