@@ -75,10 +75,10 @@ with open('extractor\\vcan0.csv', 'r') as can0file:
             messages[22] = datas[0]
             
         elif query == 0x43:
-            messages[23]  = datas[0]
+            messages[23] = datas[0]
             
         elif query == 0x44:
-            messages[24]  = datas[0]
+            messages[24] = datas[0]
             
         with open('extractor\\kelly.csv', 'a', newline = '') as kellyfile:
             writer = csv.writer(kellyfile)
