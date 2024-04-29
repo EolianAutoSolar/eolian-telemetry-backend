@@ -81,7 +81,6 @@ with open('extractor\\vcan0.csv', 'r') as can0file:
             messages[24]  = datas[0]
             
         with open('extractor\\kelly.csv', 'a', newline = '') as kellyfile:
-            
             writer = csv.writer(kellyfile)
             
             writer.writerow(messages)
