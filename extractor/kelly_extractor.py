@@ -1,5 +1,6 @@
 import csv
 import sys
+import os
 
 def linear_map(value: int, min: int, max: int, tomin: int, tomax: int):
     m = (tomax - tomin) / (max - min)
@@ -15,6 +16,14 @@ def str_to_data(str):
         data.append(int(str[i : i + 2], 16))
     return data
 
+if not (os.path.exists("kelly.csv")):
+    with open('kelly.csv', 'a', newline = '') as kellyfile:
+        writer = csv.writer(kellyfile)
+
+        messages = ["timestamp","kelly_id","brake","tps","operation_voltage","vs","bplus","ia","ib","ic","va","vb","vc","pwm","enable_motor_rotation","motor_temperature","controller_temperature","high_side_heat_sink","low_side_heat_sink","mechanical_speed","current_controller","error_mechanical_speed","throttle_switch","brake_switch","reverse_switch"]
+        
+        writer.writerow(messages)
+
 with open(sys.argv[1], 'r') as can0file:
     reader = csv.reader(can0file, delimiter = ',', quotechar = '"')
     
@@ -24,13 +33,6 @@ with open(sys.argv[1], 'r') as can0file:
         i += 1
         
         if(i == 1):
-            with open('kelly.csv', 'a', newline = '') as kellyfile:
-                writer = csv.writer(kellyfile)
-
-                messages = ["timestamp","kelly_id","brake","tps","operation_voltage","vs","bplus","ia","ib","ic","va","vb","vc","pwm","enable_motor_rotation","motor_temperature","controller_temperature","high_side_heat_sink","low_side_heat_sink","mechanical_speed","current_controller","error_mechanical_speed","throttle_switch","brake_switch","reverse_switch"]
-                
-                writer.writerow(messages)
-            
             continue
         
         messages = []

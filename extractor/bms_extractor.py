@@ -1,5 +1,6 @@
 import csv
 import sys
+import os
 
 def str_to_data(str):
     data = []
@@ -7,6 +8,14 @@ def str_to_data(str):
     for i in range(0, len(str), 2):
         data.append(int(str[i : i + 2], 16))
     return data
+
+if not (os.path.exists("bms.csv")):
+    with open('bms.csv', 'a', newline='') as bmsfile:
+        writer = csv.writer(bmsfile)
+        
+        messages = ["timestamp","pack_soc","pack_current","pack_inst_voltage","pack_open_voltage","crc_checksum","pack_abs_current","max_voltage","min_voltage","crc_checksum","max_temp","id_max_temp","min_temp","id_min_temp","mean_temp","internal_temp","id_max_volt","id_min_volt"]
+        
+        writer.writerow(messages)
 
 with open(sys.argv[1], 'r') as can1file:
     reader = csv.reader(can1file, delimiter = ',', quotechar = '"')
@@ -17,13 +26,6 @@ with open(sys.argv[1], 'r') as can1file:
         i += 1
         
         if(i == 1):
-            with open('bms.csv', 'a', newline='') as bmsfile:
-                writer = csv.writer(bmsfile)
-            
-                messages = ["timestamp","pack_soc","pack_current","pack_inst_voltage","pack_open_voltage","crc_checksum","pack_abs_current","max_voltage","min_voltage","crc_checksum","max_temp","id_max_temp","min_temp","id_min_temp","mean_temp","internal_temp","id_max_volt","id_min_volt"]
-                
-                writer.writerow(messages)
-            
             continue
         
         messages = []
