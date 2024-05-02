@@ -17,6 +17,13 @@ with open(sys.argv[1], 'r') as can1file:
         i += 1
         
         if(i == 1):
+            with open('bms.csv', 'a', newline='') as bmsfile:
+                writer = csv.writer(bmsfile)
+            
+                messages = ["timestamp","pack_soc","pack_current","pack_inst_voltage","pack_open_voltage","crc_checksum","pack_abs_current","max_voltage","min_voltage","crc_checksum","max_temp","id_max_temp","min_temp","id_min_temp","mean_temp","internal_temp","id_max_volt","id_min_volt"]
+                
+                writer.writerow(messages)
+            
             continue
         
         messages = []

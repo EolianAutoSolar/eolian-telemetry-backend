@@ -24,6 +24,13 @@ with open(sys.argv[1], 'r') as can0file:
         i += 1
         
         if(i == 1):
+            with open('kelly.csv', 'a', newline = '') as kellyfile:
+                writer = csv.writer(kellyfile)
+
+                messages = ["timestamp","kelly_id","brake","tps","operation_voltage","vs","bplus","ia","ib","ic","va","vb","vc","pwm","enable_motor_rotation","motor_temperature","controller_temperature","high_side_heat_sink","low_side_heat_sink","mechanical_speed","current_controller","error_mechanical_speed","throttle_switch","brake_switch","reverse_switch"]
+                
+                writer.writerow(messages)
+            
             continue
         
         messages = []
