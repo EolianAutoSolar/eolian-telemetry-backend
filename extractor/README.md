@@ -9,9 +9,9 @@ La estructura de los archivos csv que deben ser procesados por el programa extra
 | timestamp | msg_id | data |
 |-----------|--------|------|
 
-La unica diferencia entre los que se entregan para kelly y bms es que se entrega información distinta como por ejemplo el id del kelly.
+La única diferencia entre los que se entregan para kelly y bms es que se entrega información distinta como por ejemplo el id del kelly en el caso de los kelly.
 
-Los resultados de la ejecución se almacenaran en kelly.csv y bms.csv para kelly_extractor.py y bms_extractor.py respectivamente.
+Los resultados de la ejecución se almacenarán en kelly.csv y bms.csv para kelly_extractor.py y bms_extractor.py respectivamente. Estos archivos se crearán terminada la ejecución.
 
 ## Ejemplo de uso:
 
