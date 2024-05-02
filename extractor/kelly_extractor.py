@@ -1,4 +1,5 @@
 import csv
+import sys
 
 def linear_map(value: int, min: int, max: int, tomin: int, tomax: int):
     m = (tomax - tomin) / (max - min)
@@ -9,12 +10,14 @@ def voltage_transform(value: int):
 
 def str_to_data(str):
     data = []
+    
     for i in range(0, len(str), 2):
         data.append(int(str[i : i + 2], 16))
     return data
 
-with open('extractor\\vcan0.csv', 'r') as can0file:
+with open(sys.argv[1], 'r') as can0file:
     reader = csv.reader(can0file, delimiter = ',', quotechar = '"')
+    
     i = 0
     
     for row in reader:
@@ -80,7 +83,7 @@ with open('extractor\\vcan0.csv', 'r') as can0file:
         elif query == 0x44:
             messages[24] = datas[0]
             
-        with open('extractor\\kelly.csv', 'a', newline = '') as kellyfile:
+        with open('kelly.csv', 'a', newline = '') as kellyfile:
             writer = csv.writer(kellyfile)
             
             writer.writerow(messages)

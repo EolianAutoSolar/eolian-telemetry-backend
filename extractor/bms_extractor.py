@@ -1,13 +1,16 @@
 import csv
+import sys
 
 def str_to_data(str):
     data = []
+    
     for i in range(0, len(str), 2):
         data.append(int(str[i : i + 2], 16))
     return data
 
-with open('extractor\\vcan1.csv', 'r') as can1file:
+with open(sys.argv[1], 'r') as can1file:
     reader = csv.reader(can1file, delimiter = ',', quotechar = '"')
+    
     i = 0
     
     for row in reader:
@@ -30,6 +33,8 @@ with open('extractor\\vcan1.csv', 'r') as can1file:
         datas = str_to_data(data)
         
         messages[0] = timestamp
+        
+        #TODO: Se deben añadir las operaciones correspondientes en la lineas comentadas, esas operaciones tambien faltan en el archivo orion.py
         
         if msg_id == 0x100:
             messages[1] = datas[0]
@@ -56,7 +61,7 @@ with open('extractor\\vcan1.csv', 'r') as can1file:
             messages[16] = datas[6]
             messages[17] = datas[7]
         
-        with open('extractor\\bms.csv', 'a', newline='') as bmsfile:
+        with open('bms.csv', 'a', newline='') as bmsfile:
             writer = csv.writer(bmsfile)
             
             writer.writerow(messages)
