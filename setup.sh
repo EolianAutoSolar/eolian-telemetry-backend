@@ -1,2 +1,2 @@
 ./pre_simu/can -u
-(cd pre_simu ; ./pre_simu.py) & ./eolian-can-handler/can_handler_runner.py
+(cd pre_simu ; /usr/bin/python3 ./pre_simu.py) & /usr/bin/python3 ./eolian-can-handler/can_handler_runner.py
