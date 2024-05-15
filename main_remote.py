@@ -11,4 +11,4 @@ db = Database('recv.txt')
 recv = RemoteReceiver("COM3")
 mc = Consumer([tui, db])
 
-Telemetry().run()
+Telemetry(recv, mc).run()

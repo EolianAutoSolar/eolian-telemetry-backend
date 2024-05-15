@@ -36,14 +36,17 @@ class Process(ABC):
 # A Consumer waits for an item in the queue and execute all of it's processes on the item.
 class Consumer():
 
-    def __init__(self, processes : list[Process]) -> None:
+    def __init__(self, processes) -> None:
+        print("Init consumer")
         self.processes = processes
 
     # Execution loop
     def run(self, queue : Queue):
+        print("started processes")
         while True:
             data = queue.get()
             for process in self.processes:
+                # print(process)
                 process.use_data(data)
 
 # To create a program following this structures:
