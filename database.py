@@ -13,7 +13,7 @@ class Database(Process):
     def use_data(self, data) -> None:
         self.data_buffer += data['raw_message'] + '\n'
         self.counter += 1
-        if self.counter == 10:
+        if self.counter == 1:
             # print("saved data")
             f = open(file=self.file_name, mode='a')
             # f.write("{},{},{}\n".format(msg.timestamp, msg.arbitration_id, msg.data.hex()))

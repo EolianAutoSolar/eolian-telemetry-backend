@@ -12,6 +12,7 @@ class RemoteSender(Process):
     def __init__(self, port):
         # TODO: Save xbee
         self.xbee = XBeeDevice(port, BAUD_RATE)
+        # self.xbee.open(force_settings=True)
         self.xbee.open()
 
         self.remote = RemoteXBeeDevice(self.xbee, 
@@ -22,22 +23,23 @@ class RemoteSender(Process):
         self.data_buffer = ''
 
     def use_data(self, data):
-        self.data_buffer += '|' + data['raw_message'][0]
+        self.data_buffer += '|' + data['raw_message']
         self.counter += 1
         self.val +=1
-        # TODO: This value is important, it should not be set as a magic number
-        if self.counter == 120:
-            try:
-                self.xbee.send_data_async(self.remote, self.data_buffer)
+        self.xbee.send_data_async(self.remote, data['raw_message'])
+        # # TODO: This value is important, it should not be set as a magic number
+        # if self.counter == 6:
+        #     try:
+        #         self.xbee.send_data_async(self.remote, self.data_buffer)
 
-                print("Success")
+        #         print("Success")
 
-            except Exception as e:
-                print("Exception: %s" % e)
+        #     except Exception as e:
+        #         print("Exception: %s" % e)
 
-            finally:
-                self.counter = 0
-                self.data_buffer = ''
+        #     finally:
+        #         self.counter = 0
+        #         self.data_buffer = ''
     
 class RemoteReceiver(Producer):
 
