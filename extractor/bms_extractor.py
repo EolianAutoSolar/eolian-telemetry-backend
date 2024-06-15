@@ -13,7 +13,7 @@ if not (os.path.exists("bms.csv")):
     with open('bms.csv', 'a', newline='') as bmsfile:
         writer = csv.writer(bmsfile)
         
-        messages = ["timestamp","pack_soc","pack_current","pack_inst_voltage","pack_open_voltage","crc_checksum","pack_abs_current","max_voltage","min_voltage","crc_checksum","max_temp","id_max_temp","min_temp","id_min_temp","mean_temp","internal_temp","id_max_volt","id_min_volt"]
+        messages = ["timestamp","pack_soc","pack_current","pack_inst_voltage","pack_open_voltage","crc_checksum","pack_abs_current","max_voltage","min_voltage","crc_checksum","max_temp","id_max_temp","min_temp","id_min_temp","mean_temp","internal_temp","id_max_volt","id_min_volt","thermistor_module","lowest_thermistor","highest_thermistor","average_thermistor","numbers_of_thermistors_enabled","highest_thermistor_id","lowest_thermistor_id","thermistor_id_relative_to_all","thermistor_value","thermistor_id_relative_to_this"]
         
         writer.writerow(messages)
 
