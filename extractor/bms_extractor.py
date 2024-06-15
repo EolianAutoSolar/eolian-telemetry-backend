@@ -44,6 +44,7 @@ with open(sys.argv[1], 'r') as can1file:
         messages[0] = timestamp
         
         #TODO: Se deben añadir las operaciones correspondientes en la lineas comentadas, esas operaciones tambien faltan en el archivo orion.py
+        #TODO: Quizas falta un mensaje para el msg_id 0x103
         
         if msg_id == 0x100:
             messages[1] = datas[0]
