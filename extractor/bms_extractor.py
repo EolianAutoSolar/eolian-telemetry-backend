@@ -30,7 +30,7 @@ with open(sys.argv[1], 'r') as can1file:
         
         messages = []
         
-        for _ in range(18):
+        for _ in range(28):
             messages.append("N")
             
         timestamp = row[0]
@@ -78,17 +78,15 @@ with open(sys.argv[1], 'r') as can1file:
             messages[22] = datas[4]
             messages[23] = datas[5]
             messages[24] = datas[6]
-            messages[25] = datas[7]
         
         elif msg_id == 0x104:
-            messages[26] = datas[0]
-            messages[27] = datas[1]
-            messages[28] = datas[2]
-            messages[29] = datas[3]
-            messages[30] = datas[4]
-            messages[31] = datas[5]
-            messages[32] = datas[6]
-            messages[33] = datas[7]
+            messages[25] = datas[0] # Operacion con datas[1]
+            messages[26] = datas[2]
+            messages[27] = datas[3]
+            messages[19] = datas[4]
+            messages[20] = datas[5]
+            messages[23] = datas[6]
+            messages[24] = datas[7]
         
         with open('bms.csv', 'a', newline='') as bmsfile:
             writer = csv.writer(bmsfile)
