@@ -1,6 +1,6 @@
 import threading
 import time
-
+import queue
 
 ###
 ### PRODUCTOR (maxima prioridad)    CONSUMIDOR (--)
@@ -8,7 +8,24 @@ import time
 ### -- Mientras no hayan mensajes leidos ni procesados, ambos procesos esperan
 ### + Asumiendo que el tiempo entre mensajes alcanza para que todos los consumidores se ejecuten
 ###
-###
+
+q = queue.Queue()
+
+def read_data():
+    return input("Ingrese un mensaje: ")
+
+def Producer():
+    while True:
+        dict = read_data()
+        print(f'Working on {dict}')
+        q.put(dict)
+        print(f'Finished {dict}')
+        q.task_done()
+
+threading.Thread(target=Producer, daemon=True).start()
+
+q.join()
+print("Done")
 
 g = [1,2,3]
 
