@@ -35,7 +35,13 @@ with open(sys.argv[1], 'r') as can1file:
             
         timestamp = row[0]
         
+        # el formato que entrega el can handler es
+        # 0b aaaaaaaa bbb
+        # donde las a representan la id del mensaje
+        # y las b representan el identificador interno que maneja el
+        # can handler para el bms
         msg_id = int(row[1])
+        msg_id = msg_id >> 3
         
         data = row[2]
         
