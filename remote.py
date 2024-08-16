@@ -41,22 +41,15 @@ class RemoteReceiver():
 
         self.xbee = xbee
         self.remote = remote
-        
+
+
+
+    def read_data(self) -> dict:
         self.remote.set_sync_ops_timeout(0)
-
-        def my_cb(xbee_message):
-            print(xbee_message)
-            self.remote.set_sync_ops_timeout(0)
-
-
-
-    # def read_data(self) -> dict:
-    #     self.remote.set_sync_ops_timeout(0)
-    #     xbee_message = self.xbee.read_data_from(self.remote)
-    #     # print(read_data)
-    #     # TODO: it will probably be a bottleneck
-    #     if xbee_message is not None:
-    #             print("From %s >> %s" % (xbee_message.remote_device.get_64bit_addr(),
-    #                                      xbee_message.data), flush=True)
-
-    #     return { "raw_message": xbee_message.data.decode() }
+        xbee_message = self.xbee.read_data_from(self.remote, 10)
+        # print(read_data)
+        # TODO: it will probably be a bottleneck
+        if xbee_message is not None:
+            return { "raw_message": xbee_message.data.decode() }
+        else:
+            return { "raw_message": "Not found data"}
