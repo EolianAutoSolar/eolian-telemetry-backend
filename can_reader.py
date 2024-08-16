@@ -7,11 +7,11 @@ class CanReader(Producer):
     # If using a virtual interface bitrate is None, if using a real interface specify the bitrate
     def __init__(self, channel, bitrate=None) -> None:
         super().__init__()
-        self.bus = can.Bus(interface='socketcan', channel=channel, bitrate=bitrate)
+        self.bus = can.Bus(interface='virtual', channel=channel, bitrate=bitrate)
         self.counter = 0
 
     def read_data(self) -> dict:
-        message = self.bus.recv()
+        message = input("Enter a message: ")
         return self.parse_can_message(message)
     
     # TODO: Add orion and kelly process formulas
@@ -19,10 +19,11 @@ class CanReader(Producer):
     def parse_can_message(self, message) -> dict:
         # parse message
         self.counter+=1
-        timestamp = message.timestamp
-        id = message.arbitration_id
-        data = message.data
-        return { 'raw_message': "{}#{}#{}".format(timestamp, id, data.hex()) }
+        #timestamp = message.timestamp
+        #id = message.arbitration_id
+        #data = message.data
+        return { 'raw_message': message }
+        #return { 'raw_message': "{}#{}#{}".format(timestamp, id, data.hex()) }
         return { "kelly_izq_rpm": random.randint(5, 10),
                  "kelly_izq_temp": random.randint(0, 20), 
                  "kelly_izq_vel": random.randint(0, 20), 

@@ -10,5 +10,5 @@ class Database(Process):
 
     def use_data(self, data) -> None:
         # f.write("{},{},{}\n".format(msg.timestamp, msg.arbitration_id, msg.data.hex()))
-        self.f.write("{},{},{}\n".format(data.timestamp, data.arbitration_id, data.data.hex()))
+        self.f.write(data["raw_message"] + "\n")
         self.f.flush()
