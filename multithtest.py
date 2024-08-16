@@ -1,30 +1,32 @@
 import threading
 
+
 lista_de_consumo = []
 
 condition = threading.Condition()
 
 c = 0
 
-def consumer():
+def consumer(task):
     global c
     print('Consumer started')
     with condition:
         while not lista_de_consumo:
             print('Waiting for production')
             condition.wait()
+        task(lista_de_consumo[0])
         if c > 0:
             c -= 1
             print(f'Consumed {lista_de_consumo[0]}')
         else:
             print(f'Consumed {lista_de_consumo.pop()}')
 
-def producer(): # Ver otra condicion para que el producer no le quite la seccion critica al consumer
+def producer(recv): # Ver otra condicion para que el producer no le quite la seccion critica al consumer
     global c
     print('Producer started')
     with condition:
         c = 2
-        x = input('Ingrese un numero: ')
+        x = recv()
         lista_de_consumo.append(x)
         print(f'Produced {lista_de_consumo[0]}')
         condition.notifyAll()

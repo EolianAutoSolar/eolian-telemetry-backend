@@ -3,7 +3,7 @@ import can
 from database import Database
 from can_reader import CanReader
 from frontend import ConsoleVisualization
-from remote import RemoteReceiver
+from remote import RemoteSender
 
 lista_de_consumo = []
 
@@ -13,7 +13,8 @@ c = 0
 
 db = Database("mttest.txt")
 front = ConsoleVisualization()
-receiver = RemoteReceiver("/dev/ttyUSB0")
+canreader = CanReader("vcan0")
+sender = RemoteSender("COM5")
 
 def consumer(task):
     global c
@@ -32,7 +33,7 @@ def producer(func): # Ver otra condicion para que el producer no le quite la sec
     global c
     print('Producer started')
     with condition:
-        c = 1
+        c = 2
         cans = func()
         lista_de_consumo.append(cans)
         print(f'Produced {lista_de_consumo[0]}')
@@ -41,14 +42,17 @@ def producer(func): # Ver otra condicion para que el producer no le quite la sec
 def main_task():
     consumer_thread_1 = threading.Thread(target=consumer, args=(db.use_data,), daemon=True)
     consumer_thread_2 = threading.Thread(target=consumer, args=(front.use_data,), daemon=True)
-    producer_thread = threading.Thread(target=producer, args=(receiver.read_data,))
+    consumer_thread_3 = threading.Thread(target=consumer, args=(sender.use_data,), daemon=True)
+    producer_thread = threading.Thread(target=producer, args=(canreader.read_data,))
 
     consumer_thread_1.start()
     consumer_thread_2.start()
+    consumer_thread_3.start()
     producer_thread.start()
     
     consumer_thread_1.join()
     consumer_thread_2.join()
+    consumer_thread_3.join()
     producer_thread.join()
 
 if __name__ == '__main__':
