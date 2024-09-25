@@ -1,18 +1,18 @@
-from telemetry_core import Data
-from multiprocessing import Process
+from multiprocessing import Process, Queue
+from telemetry_core import Producer, Consumer
+
 
 # Working implementation of a whole program execution using telemetry_core architechture
 class Telemetry():
 
-    def __init__(self, services : ['Service'], readers : ['Reader']) -> None:
-        self.data_store = Data()
-        for s in services:
-            self.data_store.subscribe_service(s)
-        self.readers = readers
-        for r in self.readers:
-            self.data_store.subscribe_to_reader(r)
-    
+    def __init__(self, producer : Producer, consumer : Consumer) -> None:
+        self.producer = producer
+        self.consumer = consumer
+
     def run(self):
-        for i in range(len(self.readers) - 1):
-            Process(target=self.readers[i].read).start()
-        self.readers[len(self.readers) - 1].read()
+        queue = Queue(1)
+        Process(target=self.producer.run, args=(queue,)).start()
+        self.consumer.run(queue) #TODO: VER PORQUE ESTO NO FUNCIONA
+        # Process(target=self.consumer.run, args=(queue,)).start()
+        # self.producer.run(queue)
+        

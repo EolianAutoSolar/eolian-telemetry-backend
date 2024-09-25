@@ -1,12 +1,16 @@
 from can_reader import CanReader
-from frontend import ConsoleVisualization
 from telemetry import Telemetry
+from telemetry_core import Consumer
+from database import Database
+from frontend import ConsoleVisualization
+from remote import RemoteSender
 
 # 
-tui = ConsoleVisualization()
+canbus = CanReader('can_bridge')
 
-#
-canbus = CanReader(channel='vcan0')
-canbus2 = CanReader(channel='vcan0')
+xbee = RemoteSender('/dev/ttyUSB0')
+db = Database('otp.txt')
+front = ConsoleVisualization()
+mc = Consumer([front, db, xbee])
 
-Telemetry([tui], [canbus, canbus2]).run()
+Telemetry(canbus, mc).run()

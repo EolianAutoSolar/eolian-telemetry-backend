@@ -15,13 +15,6 @@ Para medir el comportamiento del sistema en ambos criterios, se proveen 2 escena
 
 Para generar las métricas sobre cada criterio, se ejecuta una versión modificada de la telemetría, que es igual a la versión que se usaría en el caso real, con la diferencia de que esta versión, añade algunas instrucciones al programa para poder generar las mediciones de latencia y consumo de recursos.
 
-<<<<<<< Updated upstream
-## Escenarios
-
-* Alto tráfico en 1 minuto: `archivo.can`
-* Tráfico moderando en 5 minutos: `esc2.can`
-
-=======
 El programa utiliza redes virtuales can y esta pensado para ejecutarse en la RPI4 B+.
 
 ## Escenarios
@@ -33,5 +26,4 @@ Un escenario se representa mediante un archivo que registra el tráfico de una c
 
 Pero también se puede extender la reserva de escenarios a testear pasándole el escenario al programa como `python3 testing.py <nuevo escenario>`. No importa su extensión, a los escenarios incluidos se les agrego la extensión `.can` porque deja en claro el contenido del archivo.
 
->>>>>>> Stashed changes
 

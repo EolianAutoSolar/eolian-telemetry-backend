@@ -15,7 +15,7 @@ from digi.xbee.models.address import XBee64BitAddress
 from digi.xbee.devices import XBeeDevice, RemoteXBeeDevice
 
 # TODO: Replace with the serial port where your local module is connected to.
-PORT = "COM3"
+PORT = "COM4"
 # TODO: Replace with the baud rate of your local module.
 BAUD_RATE = 230400
 
@@ -31,16 +31,17 @@ def main():
 
     try:
         device.open()
+
         device.flush_queues()
 
         print("Waiting for data...\n")
-
         remote = RemoteXBeeDevice(device, 
                 x64bit_addr=XBee64BitAddress(bytearray.fromhex('13A20041AE890D')))
-        remote.set_sync_ops_timeout(0)
+
         while True:
+            # it doesn't work without this here
+            remote.set_sync_ops_timeout(0)
             xbee_message = device.read_data_from(remote)
-            # timestamp is in xbee_message.timestamp
             if xbee_message is not None:
                 print("From %s >> %s" % (xbee_message.remote_device.get_64bit_addr(),
                                          xbee_message.data), flush=True)

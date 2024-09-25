@@ -1,52 +1,21 @@
-from multiprocessing import Process, Manager
+from multiprocessing import Process, Queue
 from abc import ABC, abstractmethod
+import datetime
 
 # TODO: make everything private
 
-# Data (or data_store) holds the current state of all the data, updating it's state
-# when receiving a notification from any Reader that it is subscribed to and sending a
-# "data was updated" notification to every Service that subscribed to this Data.
-class Data():
+# Producer connects to a data interface, receives a package and stores it in the queue.
+class Producer(ABC):
 
     def __init__(self) -> None:
-        # TODO: think wether or not this class should hold the complete car state, instead
-        # of just using the data received in each notificaction from the readers
-        manager = Manager()
-        self.data = manager.dict()
-        self.services = []
-    
-    # subscribe service to the data store
-    # TODO: add method to remove services
-    def subscribe_service(self, s : 'Service'):
-        self.services.append(s)
-    
-    # subscribe to a reader
-    def subscribe_to_reader(self, r : 'Reader'):
-        r.subscribe_data_store(self)
-    
-    # update keeps the data with the last read values and notifies all of it's services
-    def update(self, data : dict) -> None:
-        for name, value in data.items():
-            self.data[name] = value
-        for s in self.services:
-            Process(target=s.use_data, args=(self.data, )).start()
+        self.queue = None
 
-# Reader connects to a data interface, receives a package, then process it and finally sends
-# the "data updated" notification to it's subscribed Data. It is designed to poll data forever from it's interface.
-class Reader(ABC):
-
-    def __init__(self) -> None:
-        self.data_store = None
-
-    # subscribe a data store to the reader
-    def subscribe_data_store(self, ds : 'Data'):
-        self.data_store = ds
-
-    # Reading loop
-    def read(self) -> None:
+    # Execution loop
+    def run(self, queue : Queue) -> None:
         while True:
             data = self.read_data()
-            Process(target=self.data_store.update, args=(data, )).start()
+            # print("Produced data {} at {} {}".format(data, datetime.datetime.now(), queue.put(data)))
+            queue.put(data)
             # TODO: maybe a condition or delay should go here
     
     # read_data should return a dictionary containing pairs {name : value}
@@ -54,38 +23,36 @@ class Reader(ABC):
     def read_data(self) -> dict:
         "read_data should return a dictionary containing pairs {name : value}"
 
-# A service is designed to receive the data, use it for a single purpose and then discard it
-# Services could also be just a function, but rather a Class is used to optimize any startup
-# process that a service could need. For example initializing a database, keeping track of a file or
+# A process is designed to receive the data, use it for a single purpose and then discard it
+# Processs could also be just a function, but rather a Class is used to optimize any startup
+# process that a process could need. For example initializing a database, keeping track of a file or
 # running a server.
-class Service(ABC):
+class Process(ABC):
     
     @abstractmethod
-    def use_data(self, data : Data):
+    def use_data(self, data):
         "single data usage"
 
-# This is the standard way to initialize the whole program
+# A Consumer waits for an item in the queue and execute all of it's processes on the item.
+class Consumer():
 
-# # 1. Create the Data
-# data_store = Data()
+    def __init__(self, processes) -> None:
+        print("Init consumer")
+        self.processes = processes
 
-# # 2. Subscribe all of the services to the Data
-# for s in services:
-#    data_store.subscribe_service(s)
+    # Execution loop
+    def run(self, queue : Queue):
+        print("started processes")
+        while True:
+            data = queue.get()
+            for process in self.processes:
+                # print(process)
+                process.use_data(data)
 
-# # 3. Initialize all the Readers and subscribe the Data store to them
-# for r in readers:
-#    data_store.subscribe_to_reader(r)
+# To create a program following this structures:
+#   1. Set up the various producers
+#   2. Set up the Consumer with the producers from 1.
+#   3. Set un the Producer
+#   4. Call Telemetry with 3. and 2.
 
-# # 4. Start all of the Readers main loop
-# for r in readers:
-#     Process(target=r.read).start()
-# Note: Remember to always have a running loop as the main process to not kill
-#       to all of the spawned processes.
-    
-# All of this program uses number_of_readers number of threads.
-# Also temporary threads are spawned to handle the Data updates and service executions.
-# Meaning that for each data received by a reader, 1 + number_of_services
-# temporary processes are spawned.
-
-# TODO: Make sure that all of the spawned processes finishs before a new spawn of the processes.
+# You can find an example in telemetry.py

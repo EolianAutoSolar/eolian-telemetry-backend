@@ -15,6 +15,12 @@
 from digi.xbee.devices import XBeeDevice
 
 # TODO: Replace with the serial port where your local module is connected to.
+
+from digi.xbee.models.address import XBee64BitAddress
+
+from digi.xbee.devices import XBeeDevice, RemoteXBeeDevice
+
+# TODO: Replace with the serial port where your local module is connected to.
 PORT = "/dev/ttyUSB0"
 # TODO: Replace with the baud rate of your local module.
 BAUD_RATE = 230400
@@ -34,8 +40,9 @@ def main():
         device.open()
 
         # Obtain the remote XBee device from the XBee network.
-        xbee_network = device.get_network()
-        remote_device = xbee_network.discover_device(REMOTE_NODE_ID)
+        remote_device = RemoteXBeeDevice(device, 
+                x64bit_addr=XBee64BitAddress(bytearray.fromhex('0013A20041AE8955')))
+        print(remote_device.get_64bit_addr())
         if remote_device is None:
             print("Could not find the remote device")
             exit(1)
