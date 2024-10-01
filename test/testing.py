@@ -1,9 +1,19 @@
 import sys
+import os
+from multiprocessing import Process
 
+def feed(scenario):
+    os.system("canplayer -I {} can_bridge=vcan0".format(scenario))
 
 # ejecuta el pipeline del testing
 def test(scenario):
-    pass
+    ## ejecutar feeder con el escenario en paralelo
+    feeder = Process(target=feed, args=(scenario,))
+    feeder.start()
+
+    ## ejecutar el programa
+    # main
+    feeder.join()
 
 if __name__ == "__main__":
 
@@ -14,5 +24,8 @@ if __name__ == "__main__":
         print("ERROR: Ingrese un escenario --> python3 testing.py <escenario>")
         exit()
 
+    print("Iniciando test para el escenario {}...".format(scenario))
     test(scenario)
+    ## barra de progreso
+    print("Test finalizado")
     
