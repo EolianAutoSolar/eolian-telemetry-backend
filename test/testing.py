@@ -3,6 +3,7 @@ import os
 from multiprocessing import Process
 
 def feed(scenario):
+    # TODO: Agregar diferencia de delays con respecto al tiempo actual y el tiempo del archivo del escenario
     os.system("canplayer -I {} can_bridge=vcan0".format(scenario))
 
 # ejecuta el pipeline del testing
@@ -12,6 +13,12 @@ def test(scenario):
     feeder.start()
 
     ## ejecutar el programa
+    ## for f in use_data_funs:
+    ##    def modded_f(data):
+    ##        log_received_data_time
+    ##        f(data)
+    # main([funciones use data], [funciones recv])
+    # main.run()
     # main
     feeder.join()
 

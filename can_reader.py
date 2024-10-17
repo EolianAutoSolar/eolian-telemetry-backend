@@ -1,8 +1,9 @@
-from telemetry_core import Producer
 import can
 import random
 
-class CanReader(Producer):
+bus = can.Bus(interface='socketcan', channel='vcan0')
+
+class CanReader():
 
     # If using a virtual interface bitrate is None, if using a real interface specify the bitrate
     def __init__(self, channel, bitrate=None) -> None:
@@ -11,7 +12,7 @@ class CanReader(Producer):
         self.counter = 0
 
     def read_data(self) -> dict:
-        message = input("Enter a message: ")
+        message = bus.recv()
         return self.parse_can_message(message)
     
     # TODO: Add orion and kelly process formulas

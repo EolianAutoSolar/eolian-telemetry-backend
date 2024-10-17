@@ -1,8 +1,8 @@
-from telemetry_core import Process
+
 
 NOT_SAMPLED_YET = -127
 # tui interface
-class ConsoleVisualization(Process):
+class ConsoleVisualization():
 
     def __init__(self) -> None:
         super().__init__()
