@@ -29,6 +29,10 @@ def producer(func): # Ver otra condicion para que el producer no le quite la sec
         print(f'Produced {lista_de_consumo[0]}')
         condition.notify_all()
 
+# ejecuta los producers y consumers de forma concurrente:
+# NOTA: actualmente, crea todos los procesos 1 vez por paquete,
+# se podria mejorar agregando como argumento la cantidad de paquetes a procesar y creando todos los procesos solo 1 vez.
+# Para esto hay que tener en cuenta si es posible tener +-1 mensaje (por interferencia) y si es posible, como manejar ese caso
 def main_task(recv, consumers: list):
     global num_consumers
     num_consumers = len(consumers)-1

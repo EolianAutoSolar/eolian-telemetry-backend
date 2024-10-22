@@ -6,6 +6,7 @@ class ConsoleVisualization():
 
     def __init__(self) -> None:
         super().__init__()
+        self.id = "TUI"
         view_data = {}
         view_data["kelly_der_rpm"] = NOT_SAMPLED_YET
         view_data["kelly_der_temp"] = NOT_SAMPLED_YET

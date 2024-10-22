@@ -1,5 +1,6 @@
 class Database():
     def __init__(self, file_name: str) -> None:
+        self.id = "DB"
         self.file_name = file_name
         f = open(file=self.file_name, mode='w+')
         f.write("timestamp,msg_id,data\n")

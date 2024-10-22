@@ -4,6 +4,14 @@
 
 `python3 testing.py <escenario.can>`
 
+Al ejecutar una prueba, se generarán 2 archivos de métricas:
+
+1. 'system_usage.log' -> Consumo de cpu y ram durante la prueba
+2. Pend -> Delays para cada paquete
+
+NOTA: Para 1. idealmente se debe registrar la carga producida solamente por la telemetría, omitiendo el feeder y las métricas. Más
+detalles en la implementación de `log_usage`.
+
 ## Descripción 
 
 Para que el funcionamiento del sistema se considere "exitoso" se consideran los siguientes 2 criterios:
@@ -24,6 +32,6 @@ Un escenario se representa mediante un archivo que registra el tráfico de una c
 * Alto tráfico en 1 minuto: `archivo.can`
 * Tráfico moderando en 5 minutos: `esc2.can`
 
-Pero también se puede extender la reserva de escenarios a testear pasándole el escenario al programa como `python3 testing.py <nuevo escenario>`. No importa su extensión, a los escenarios incluidos se les agrego la extensión `.can` porque deja en claro el contenido del archivo.
+Pero también se puede extender la reserva de escenarios a testear pasándole el escenario al programa como `python3 testing.py <nuevo escenario>`. No importa su extensión, a los escenarios incluidos se les agregó la extensión `.can` porque deja en claro el contenido del archivo.
 
 
