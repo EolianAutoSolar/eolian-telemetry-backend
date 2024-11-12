@@ -5,7 +5,7 @@ import datetime
 import time
 from multiprocessing import Process, Event
 import logging
-
+from threading import Lock
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -20,6 +20,13 @@ db = Database("mttest.txt")
 front = ConsoleVisualization()
 canreader = CanReader("vcan0")
 
+delays = open("delays.csv", "w+")
+delays.close()
+delays_lock = Lock()
+
+processings = open("processings.csv", "w+")
+processings.close()
+processings_lock = Lock()
 # testing framework
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -27,6 +34,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
+
 
 class TestConsumer():
     def __init__(self, consumer):
@@ -50,6 +58,15 @@ class TestConsumer():
             emit,
             str(data)
         ))
+        with delays_lock:
+            with open("delays.csv", "a") as delays:
+                delays.write("RECV:{}|{}|{}|{}\n".format(
+                    consumer_id,
+                    delay,
+                    recv,
+                    emit,
+                    str(data)
+                ))
         self.consumer.use_data(data)
         # Formato: USE:Servicio|Process_time=(Timestamp-Recv)|Timestamp|Packet
         end_timestamp = datetime.datetime.now().timestamp()
@@ -60,6 +77,14 @@ class TestConsumer():
             end_timestamp,
             str(data)
         ))
+        with processings_lock:
+            with open("processings.csv", "a") as processings:
+                processings.write("PROCESS:{}|{}|{}|{}\n".format(
+                    consumer_id,
+                    process_time,
+                    end_timestamp,
+                    str(data)
+                ))
 
 # cuenta la cantidad de frames canbus en el escenario entregado.
 def count_packets(scenario) -> int:
@@ -114,6 +139,9 @@ if __name__ == "__main__":
         consumers=[db, front],
         scenario=scenario
     )
+
+    delays.close()
+    processings.close()
 
     ## barra de progreso
     print("Test finalizado")
