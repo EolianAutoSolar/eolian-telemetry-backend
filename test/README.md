@@ -13,11 +13,12 @@ Es importante estar seguro de que el escenario que se le entregué al script de 
 
 Ejecutar el script de testing con `python3 testing.py <escenario.can>`
 
-Al ejecutar una prueba, se generarán 3 archivos de métricas:
+Al ejecutar una prueba, se generarán 4 archivos de métricas e información:
 
 1. `system_usage.log` -> Consumo de cpu y ram durante la prueba
 2. `delays.csv` -> Delays para cada paquete (diferencia de timestamp canbus y timestamp al llamar a use_data en algun consumer)
-2. `processings.csv` -> Tiempos de procesamiento de cada paquete (diferencia entre tiempo antes y despues de llamar a use_data en algun consumer)
+3. `processings.csv` -> Tiempos de procesamiento de cada paquete (diferencia entre tiempo antes y despues de llamar a use_data en algun consumer)
+4. `log_file.log` -> Log de todo el hilo de ejecución.
 
 NOTA: Para 1. idealmente se debe registrar la carga producida solamente por la telemetría, omitiendo el feeder y las métricas. Más
 detalles en la implementación de `metrics.py->log_usage`.
