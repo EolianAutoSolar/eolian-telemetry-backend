@@ -4,8 +4,6 @@ import time
 from multiprocessing import Event
 
 # TODO: poder diferenciar la carga producida por la telemetria, es decir sin contar el feeder ni las metricas
-# a grandes rasgos hay que identificar que core esta siendo utilizado para main_task e ir registrando su consumo, la dificultad
-# es que el OS va moviendo el proceso de core.
 def log_usage(stop_event):
     # Define the interval (0.2 seconds) and duration (10800 seconds for 3 hours)
     file_name = "system_usage.log"

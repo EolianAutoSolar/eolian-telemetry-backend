@@ -1,4 +1,5 @@
 *.csv
+*.log
 venv
 __pycache__
 tools/__pycache__/*

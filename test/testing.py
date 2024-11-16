@@ -18,7 +18,8 @@ from metrics import log_usage
 # modificable
 db = Database("mttest.txt")
 front = ConsoleVisualization()
-canreader = CanReader("vcan0")
+canreader = CanReader("can_bridge")
+#
 
 delays = open("delays.csv", "w+")
 delays.close()
@@ -35,7 +36,7 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-
+# Wrapper para las clases consumer, su principal objetivo es registrar los tiempos de delay y procesamiento de cada consumer
 class TestConsumer():
     def __init__(self, consumer):
         self.consumer = consumer
@@ -97,7 +98,7 @@ def count_packets(scenario) -> int:
 
 def feed(scenario):
     # TODO: Agregar diferencia de delays con respecto al tiempo actual y el tiempo del archivo del escenario
-    os.system("canplayer -I {} vcan0=vcan0".format(scenario))
+    os.system("canplayer -I {} can_bridge=can_bridge".format(scenario))
 
 # ejecuta el pipeline del testing
 def test(producer, consumers, scenario):
@@ -136,7 +137,7 @@ if __name__ == "__main__":
 
     test(
         producer=canreader.read_data,
-        consumers=[db, front],
+        consumers=[db],
         scenario=scenario
     )
 

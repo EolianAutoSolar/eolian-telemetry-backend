@@ -1,18 +1,16 @@
 import can
 import random
 
-bus = can.Bus(interface='socketcan', channel='vcan0')
-
 class CanReader():
 
     # If using a virtual interface bitrate is None, if using a real interface specify the bitrate
     def __init__(self, channel, bitrate=None) -> None:
         super().__init__()
-        self.bus = can.Bus(interface='virtual', channel=channel, bitrate=bitrate)
+        self.bus = can.Bus(interface='socketcan', channel=channel, bitrate=bitrate)
         self.counter = 0
 
     def read_data(self) -> dict:
-        message = bus.recv()
+        message = self.bus.recv()
         return self.parse_can_message(message)
     
     # TODO: Add orion and kelly process formulas
