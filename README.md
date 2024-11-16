@@ -28,13 +28,3 @@ Video de funcionamiento [en este link](https://youtu.be/AczRkLPMyjk).
 
 1. Iniciar redes can `pre_simu/can -u`.
 2. Ejecutar simulador `python3 pre_simu/pre_simu.py`.
-
-<<<<<<< HEAD
-### TODO:
-
-[] Agregar loggers para el programa en general.
-=======
-## Rama Producer-Consumer
-
-Esta rama aplica el patrón de diseño producer-consumer a la telemetría.
->>>>>>> multithreading
